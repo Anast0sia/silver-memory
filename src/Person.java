@@ -1,20 +1,20 @@
+import java.util.OptionalInt;
+
 public class Person {
     protected String name;
     protected String surname;
-    protected int age;
+    protected OptionalInt age;
     protected String address;
-    protected boolean hasAge;
 
-    public Person(String name, String surname, int age, String address, boolean hasAge) {
+    public Person(String name, String surname, int age, String address) {
         this.name = name;
         this.surname = surname;
-        this.age = age;
+        this.age = OptionalInt.of(age);
         this.address = address;
-        this.hasAge = hasAge;
     }
 
     public boolean hasAge() {
-        return hasAge;
+        return age.isPresent();
     }
     public boolean hasAddress() {
         return address != null;
@@ -26,7 +26,7 @@ public class Person {
     public String getSurname() {
         return surname;
     }
-    public int getAge() {
+    public OptionalInt getAge() {
         return age;
     }
     public String getAddress() {
@@ -37,8 +37,8 @@ public class Person {
         this.address = address;
     }
     public void happyBirthday() {
-        if (hasAge) {
-            age++;
+        if (age.isPresent()) {
+            age = OptionalInt.of(age.getAsInt() + 1);
         }
     }
 
@@ -47,12 +47,10 @@ public class Person {
         protected String surname;
         protected int age;
         protected String address;
-        protected boolean hasAge;
 
-        public PersonBuilder(String surname, int age, String address) {
+        public PersonBuilder(String surname, String name) {
             this.surname = surname;
-            this.age = age;
-            this.address = address;
+            this.name = name;
         }
         public PersonBuilder() {}
 
@@ -69,7 +67,6 @@ public class Person {
                 throw new IllegalArgumentException("Возраст не может быть отрицательным");
             }
             this.age = age;
-            this.hasAge = true;
             return this;
         }
         public PersonBuilder setAddress(String address) {
@@ -78,17 +75,17 @@ public class Person {
         }
 
         public Person build() {
-            return new Person(name, surname, age, address, hasAge);
+            return new Person(name, surname, age, address);
         }
     }
 
     public PersonBuilder newChildBuilder() {
-        return new PersonBuilder(surname, age, address);
+        return new PersonBuilder(surname, name);
     }
 
     public String toString() {
         return getName() + " " + getSurname() +
-                (hasAge() ? " (" + getAge() + " лет)" : "") +
+                (hasAge() ? " (" + age.getAsInt() + " лет)" : "") +
                 (hasAddress() ? ", адрес: " + getAddress() : "");
     }
 }

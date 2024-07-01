@@ -1,7 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        Person mom = new Person
-                .PersonBuilder()
+        Person mom = new Person.PersonBuilder()
                 .setName("Анна")
                 .setSurname("Вольф")
                 .setAge(31)
