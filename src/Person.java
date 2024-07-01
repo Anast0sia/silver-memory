@@ -6,16 +6,17 @@ public class Person {
     protected OptionalInt age;
     protected String address;
 
-    public Person(String name, String surname, int age, String address) {
+    public Person(String name, String surname, OptionalInt age, String address) {
         this.name = name;
         this.surname = surname;
-        this.age = OptionalInt.of(age);
+        this.age = age;
         this.address = address;
     }
 
     public boolean hasAge() {
         return age.isPresent();
     }
+
     public boolean hasAddress() {
         return address != null;
     }
@@ -23,12 +24,15 @@ public class Person {
     public String getName() {
         return name;
     }
+
     public String getSurname() {
         return surname;
     }
+
     public OptionalInt getAge() {
         return age;
     }
+
     public String getAddress() {
         return address;
     }
@@ -36,6 +40,7 @@ public class Person {
     public void setAddress(String address) {
         this.address = address;
     }
+
     public void happyBirthday() {
         if (age.isPresent()) {
             age = OptionalInt.of(age.getAsInt() + 1);
@@ -45,7 +50,7 @@ public class Person {
     public static class PersonBuilder {
         protected String name;
         protected String surname;
-        protected int age;
+        protected OptionalInt age = OptionalInt.empty();;
         protected String address;
 
         public PersonBuilder(String surname, String address) {
@@ -58,15 +63,17 @@ public class Person {
             this.name = name;
             return this;
         }
+
         public PersonBuilder setSurname(String surname) {
             this.surname = surname;
             return this;
         }
+
         public PersonBuilder setAge(int age) {
             if (age < 0) {
                 throw new IllegalArgumentException("Возраст не может быть отрицательным");
             }
-            this.age = age;
+            this.age = OptionalInt.of(age);
             return this;
         }
         public PersonBuilder setAddress(String address) {
@@ -75,6 +82,9 @@ public class Person {
         }
 
         public Person build() {
+            if (name == null || surname == null) {
+                throw new IllegalStateException("Необходимо указать имя и фамилию");
+            }
             return new Person(name, surname, age, address);
         }
     }
