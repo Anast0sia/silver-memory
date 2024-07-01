@@ -48,9 +48,9 @@ public class Person {
         protected int age;
         protected String address;
 
-        public PersonBuilder(String surname, String name) {
+        public PersonBuilder(String surname, String address) {
             this.surname = surname;
-            this.name = name;
+            this.address = address;
         }
         public PersonBuilder() {}
 
@@ -80,7 +80,7 @@ public class Person {
     }
 
     public PersonBuilder newChildBuilder() {
-        return new PersonBuilder(surname, name);
+        return new PersonBuilder(surname, address);
     }
 
     public String toString() {
